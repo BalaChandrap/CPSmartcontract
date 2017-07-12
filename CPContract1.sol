@@ -2,9 +2,7 @@ pragma solidity ^0.4.6;
 
 contract CommercialPaper{
     
-     
-    
-    
+
     struct CP{
         address issuer;
         address owner;
@@ -28,11 +26,11 @@ contract CommercialPaper{
         
         if(_rating < 5)
         {
-            throw;
+            return false;
         }
         if(_redemption <60*60)
         {
-            throw;
+            return false;
         }
         
         if(!cps[msg.sender].created)
@@ -48,13 +46,24 @@ contract CommercialPaper{
         
     }
     
-    function transferCP(address _newOwner) public returns (bool success){
+    function buyPaper(address issuer) public payable returns(bool success){
         
-        if(cps[msg.sender].created)
+        if(cps[issuer].value != msg.value)
         {
-            cps[msg.sender].owner = _newOwner;
-            PaperTransferred(cps[msg.sender].name,_newOwner);
+            return false;
+        }
+        
+        if(cps[issuer].owner!=cps[issuer].issuer)
+        {
+            return false;
+        }
+        
+        if(cps[issuer].created)
+        {
+            cps[issuer].owner = msg.sender;
+            PaperTransferred(cps[issuer].name,msg.sender);
             return true;
+            cps[issuer].owner.transfer(msg.value);
         }
         return false;
         
