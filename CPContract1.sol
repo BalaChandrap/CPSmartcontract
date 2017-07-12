@@ -1,6 +1,6 @@
 pragma solidity ^0.4.6;
 
-contract CommercialPaper{
+contract CPContract{
     
 
     struct CP{
@@ -83,3 +83,4 @@ contract CommercialPaper{
     
     
 }
+
